@@ -1,0 +1,42 @@
+%YAML 1.2
+---
+name: Pad
+file_extensions: [pad]
+scope: source.c
+
+contexts:
+  main:
+    - match: \b(def|met|del|return|break|continue|block|throw|try|catch|global|inject|extends|nonlocal|and|or|not|if|elif|else|for|end|struct|from|import|as)\b
+      scope: keyword.control.c
+    - match: ({@|@})
+      scope: keyword.control.c
+    - match: (:|;|,)
+      scope: keyword.control.c
+    - match: \(
+      scope: keyword.control.include.c++
+    - match: \)
+      scope: keyword.control.include.c++
+    - match: \/\/.*$
+      scope: punctuation.definition.comment
+    - match: \/\*.*\*\/
+      scope: punctuation.definition.comment      
+    - match: '"'
+      scope: punctuation.definition.string.begin.example-c
+      push: string
+    - match: \d+(\.(\d+))*
+      scope: constant.numeric
+    - match: (nil|false|true)
+      scope: constant.numeric
+    - match: '\/\*'
+      scope: punctuation.definition.comment.c
+      push: 
+        - meta_scope: comment.block.c
+        - match: '\*\/'
+          pop: true
+  string:
+    - meta_scope: string.quoted.double.c
+    - match: \\.
+      scope: constant.character.escape.c
+    - match: '"'
+      scope: punctuation.definition.string.begin.example-c
+      pop: true
